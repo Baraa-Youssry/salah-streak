@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Salah Streak">
+  <rect width="512" height="512" fill="#0f766e"/>
+  <circle cx="256" cy="200" r="72" fill="none" stroke="#ffffff" stroke-width="24"/>
+  <path d="M256 96 v48 M256 256 v48 M152 200 h48 M312 200 h48" stroke="#ffffff" stroke-width="20" stroke-linecap="round"/>
+  <path d="M156 368 h200" stroke="#ffffff" stroke-width="24" stroke-linecap="round"/>
+  <path d="M336 352 l32 32 l64 -72" fill="none" stroke="#a5f3fc" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
