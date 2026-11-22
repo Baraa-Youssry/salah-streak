@@ -161,4 +161,4 @@ public/           manifest.webmanifest · sw.js · icons
 
 ## License
 
-MIT
+BY
