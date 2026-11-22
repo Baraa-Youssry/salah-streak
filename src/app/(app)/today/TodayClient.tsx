@@ -173,15 +173,15 @@ export function TodayClient({
           return (
             <li
               key={prayer}
-              className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card px-4 py-3.5 ${
+              className={`flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-xl border bg-card px-3 py-3.5 sm:px-4 ${
                 isCurrent
                   ? 'border-teal-500 ring-2 ring-teal-500/40'
                   : 'border-border'
               }`}
             >
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-foreground">
+                  <span className="text-base font-semibold text-foreground">
                     {t(`prayer.${prayer}`)}
                   </span>
                   {isCurrent && (
@@ -195,9 +195,9 @@ export function TodayClient({
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2">
                 {isFuture ? (
-                  <span className="inline-flex min-h-[40px] items-center rounded-lg bg-muted px-3 text-sm font-medium text-muted-foreground">
+                  <span className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg bg-muted px-3 text-sm font-medium text-muted-foreground">
                     {status === 'done'
                       ? `✓ ${t('status.done')}`
                       : status === 'missed'
@@ -253,7 +253,7 @@ function ToggleButton({
   ariaLabel: string;
 }) {
   const base =
-    'inline-flex min-h-[40px] items-center rounded-lg px-3.5 text-sm font-medium transition-colors disabled:opacity-60';
+    'inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-3 text-sm font-medium transition-colors disabled:opacity-60';
 
   if (tone === 'done') {
     return (

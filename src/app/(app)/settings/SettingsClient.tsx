@@ -100,141 +100,158 @@ export function SettingsClient({ userId, profile, preferences }: Props) {
         </p>
       )}
 
-      {/* Language */}
-      <section className="rounded-xl border border-border bg-card p-4">
-        <h2 className="mb-3 text-base font-semibold">{t('settings.language')}</h2>
-        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={t('settings.language')}>
-          {(['en', 'ar'] as Lang[]).map((l) => (
+      {/* Cards: stacked on mobile, 2-col from md */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {/* Language */}
+        <section className="rounded-xl border border-border bg-card p-4">
+          <h2 className="mb-3 text-base font-semibold">
+            {t('settings.language')}
+          </h2>
+          <div
+            className="grid grid-cols-2 gap-2"
+            role="radiogroup"
+            aria-label={t('settings.language')}
+          >
+            {(['en', 'ar'] as Lang[]).map((l) => (
+              <button
+                key={l}
+                type="button"
+                role="radio"
+                aria-checked={lang === l}
+                onClick={() => changeLang(l)}
+                className={`min-h-[44px] rounded-lg px-4 py-2.5 text-sm font-medium ${
+                  lang === l
+                    ? 'bg-teal-600 text-white'
+                    : 'border border-border bg-background hover:bg-muted'
+                }`}
+              >
+                {l === 'en' ? 'English' : 'العربية'}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Theme */}
+        <section className="rounded-xl border border-border bg-card p-4">
+          <h2 className="mb-3 text-base font-semibold">
+            {t('settings.theme')}
+          </h2>
+          <div
+            className="grid grid-cols-2 gap-2"
+            role="radiogroup"
+            aria-label={t('settings.theme')}
+          >
             <button
-              key={l}
               type="button"
               role="radio"
-              aria-checked={lang === l}
-              onClick={() => changeLang(l)}
+              aria-checked={theme === 'light'}
+              onClick={() => setTheme('light')}
               className={`min-h-[44px] rounded-lg px-4 py-2.5 text-sm font-medium ${
-                lang === l
+                theme === 'light'
                   ? 'bg-teal-600 text-white'
                   : 'border border-border bg-background hover:bg-muted'
               }`}
             >
-              {l === 'en' ? 'English' : 'العربية'}
+              ☀️ {t('settings.light')}
             </button>
-          ))}
-        </div>
-      </section>
-
-      {/* Theme */}
-      <section className="rounded-xl border border-border bg-card p-4">
-        <h2 className="mb-3 text-base font-semibold">{t('settings.theme')}</h2>
-        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={t('settings.theme')}>
-          <button
-            type="button"
-            role="radio"
-            aria-checked={theme === 'light'}
-            onClick={() => setTheme('light')}
-            className={`min-h-[44px] rounded-lg px-4 py-2.5 text-sm font-medium ${
-              theme === 'light'
-                ? 'bg-teal-600 text-white'
-                : 'border border-border bg-background hover:bg-muted'
-            }`}
-          >
-            ☀️ {t('settings.light')}
-          </button>
-          <button
-            type="button"
-            role="radio"
-            aria-checked={theme === 'dark'}
-            onClick={() => setTheme('dark')}
-            className={`min-h-[44px] rounded-lg px-4 py-2.5 text-sm font-medium ${
-              theme === 'dark'
-                ? 'bg-teal-600 text-white'
-                : 'border border-border bg-background hover:bg-muted'
-            }`}
-          >
-            🌙 {t('settings.dark')}
-          </button>
-        </div>
-      </section>
-
-      {/* Profile */}
-      <section className="rounded-xl border border-border bg-card p-4">
-        <h2 className="mb-3 text-base font-semibold">{t('settings.profile')}</h2>
-        <form onSubmit={saveProfile} className="space-y-3">
-          <div>
-            <label
-              htmlFor="display-name"
-              className="mb-1 block text-sm font-medium text-muted-foreground"
+            <button
+              type="button"
+              role="radio"
+              aria-checked={theme === 'dark'}
+              onClick={() => setTheme('dark')}
+              className={`min-h-[44px] rounded-lg px-4 py-2.5 text-sm font-medium ${
+                theme === 'dark'
+                  ? 'bg-teal-600 text-white'
+                  : 'border border-border bg-background hover:bg-muted'
+              }`}
             >
-              {t('settings.displayName')}
-            </label>
-            <input
-              id="display-name"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              required
-              maxLength={100}
-              className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
-            />
+              🌙 {t('settings.dark')}
+            </button>
           </div>
-          <button
-            type="submit"
-            disabled={busy}
-            className="min-h-[44px] rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-700 disabled:opacity-60"
-          >
-            {t('common.save')}
-          </button>
-        </form>
-      </section>
+        </section>
 
-      {/* Notification preferences */}
-      <section className="rounded-xl border border-border bg-card p-4">
-        <h2 className="mb-3 text-base font-semibold">
-          {t('settings.notifications')}
-        </h2>
-
-        <label className="mb-4 flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-lg bg-muted/60 px-3 py-2.5">
-          <span className="text-sm font-medium">
-            {t('settings.notificationsEnabled')}
-          </span>
-          <input
-            type="checkbox"
-            checked={prefs?.enabled ?? false}
-            onChange={(e) => {
-              if (!prefs) return;
-              void savePrefs({ ...prefs, enabled: e.target.checked });
-            }}
-            className="h-5 w-5 shrink-0 accent-teal-600"
-          />
-        </label>
-
-        <fieldset
-          disabled={!prefs?.enabled}
-          className="space-y-2 disabled:opacity-50"
-        >
-          <legend className="mb-2 text-sm font-medium text-muted-foreground">
-            {t('settings.perPrayer')}
-          </legend>
-          {PRAYERS.map((p) => (
-            <label
-              key={p}
-              className="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-lg border border-border px-3 py-2.5"
-            >
-              <span className="text-sm font-medium">{t(`prayer.${p}`)}</span>
+        {/* Profile */}
+        <section className="rounded-xl border border-border bg-card p-4">
+          <h2 className="mb-3 text-base font-semibold">
+            {t('settings.profile')}
+          </h2>
+          <form onSubmit={saveProfile} className="space-y-3">
+            <div>
+              <label
+                htmlFor="display-name"
+                className="mb-1 block text-sm font-medium text-muted-foreground"
+              >
+                {t('settings.displayName')}
+              </label>
               <input
-                type="checkbox"
-                checked={prefs?.[p] ?? false}
-                onChange={(e) => {
-                  if (!prefs) return;
-                  void savePrefs({ ...prefs, [p]: e.target.checked });
-                }}
-                className="h-5 w-5 shrink-0 accent-teal-600"
+                id="display-name"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                required
+                maxLength={100}
+                className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
               />
-            </label>
-          ))}
-        </fieldset>
-      </section>
+            </div>
+            <button
+              type="submit"
+              disabled={busy}
+              className="min-h-[44px] w-full rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-700 disabled:opacity-60"
+            >
+              {t('common.save')}
+            </button>
+          </form>
+        </section>
 
-      {/* Push */}
+        {/* Notification preferences */}
+        <section className="rounded-xl border border-border bg-card p-4">
+          <h2 className="mb-3 text-base font-semibold">
+            {t('settings.notifications')}
+          </h2>
+
+          <label className="mb-4 flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-lg bg-muted/60 px-3 py-2.5">
+            <span className="text-sm font-medium">
+              {t('settings.notificationsEnabled')}
+            </span>
+            <input
+              type="checkbox"
+              checked={prefs?.enabled ?? false}
+              onChange={(e) => {
+                if (!prefs) return;
+                void savePrefs({ ...prefs, enabled: e.target.checked });
+              }}
+              className="h-5 w-5 shrink-0 accent-teal-600"
+            />
+          </label>
+
+          <fieldset
+            disabled={!prefs?.enabled}
+            className="space-y-2 disabled:opacity-50"
+          >
+            <legend className="mb-2 text-sm font-medium text-muted-foreground">
+              {t('settings.perPrayer')}
+            </legend>
+            {PRAYERS.map((p) => (
+              <label
+                key={p}
+                className="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-lg border border-border px-3 py-2.5"
+              >
+                <span className="text-sm font-medium">{t(`prayer.${p}`)}</span>
+                <input
+                  type="checkbox"
+                  checked={prefs?.[p] ?? false}
+                  onChange={(e) => {
+                    if (!prefs) return;
+                    void savePrefs({ ...prefs, [p]: e.target.checked });
+                  }}
+                  className="h-5 w-5 shrink-0 accent-teal-600"
+                />
+              </label>
+            ))}
+          </fieldset>
+        </section>
+      </div>
+
+      {/* Push — full width */}
       <section className="rounded-xl border border-border bg-card p-4">
         <h2 className="mb-3 text-base font-semibold">{t('settings.push')}</h2>
         <PushSubscribeButton />

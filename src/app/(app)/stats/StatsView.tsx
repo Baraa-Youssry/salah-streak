@@ -46,7 +46,7 @@ export function StatsView({
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-foreground">{t('stats.title')}</h1>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-3">
         <StatCard
           label={t('stats.streak')}
           value={t('stats.streakDays', { count: streak })}

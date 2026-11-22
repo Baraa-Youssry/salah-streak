@@ -223,7 +223,7 @@ export function GroupsClient({ initialGroups, userId }: Props) {
         </p>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <form
           onSubmit={handleCreate}
           className="rounded-xl border border-border bg-card p-4"
@@ -375,21 +375,43 @@ function MemberTable({ bundle }: { bundle: GroupBundle }) {
       <h4 className="mb-3 text-sm font-medium text-muted-foreground">
         {t('groups.memberTable')}
       </h4>
-      <div className="-mx-1 overflow-x-auto">
-        <table className="w-full min-w-[420px] border-collapse text-sm">
+      {/* Horizontal scroll on narrow screens; first column sticks (logical start). */}
+      <div className="-mx-1 overflow-x-auto px-1">
+        <table className="w-full min-w-0 border-collapse text-sm md:min-w-[420px]">
           <thead>
-            <tr className="border-b border-border text-start">
-              <th className="px-2 py-2 text-start font-medium text-muted-foreground">
-                {t('settings.displayName')}
+            <tr className="border-b border-border">
+              <th
+                scope="col"
+                className="sticky start-0 z-10 bg-card pe-2 ps-1 text-start font-medium text-muted-foreground"
+              >
+                <span className="hidden md:inline">
+                  {t('settings.displayName')}
+                </span>
+                <span className="md:hidden" aria-hidden>
+                  ✓
+                </span>
               </th>
               {PRAYERS.map((p) => (
                 <th
                   key={p}
-                  className="px-2 py-2 text-center font-medium text-muted-foreground"
+                  scope="col"
+                  className="px-1.5 py-2 text-center font-medium text-muted-foreground sm:px-2"
                 >
-                  {t(`prayer.${p}`)}
+                  {/* Compact: first letter / icon on mobile; full name from md */}
+                  <span className="md:hidden" aria-hidden>
+                    {t(`prayer.${p}`).charAt(0)}
+                  </span>
+                  <span className="hidden md:inline">{t(`prayer.${p}`)}</span>
+                  <span className="sr-only md:hidden">{t(`prayer.${p}`)}</span>
                 </th>
               ))}
+              <th
+                scope="col"
+                className="px-1.5 py-2 text-center font-medium text-muted-foreground sm:px-2"
+              >
+                <span aria-hidden>✓</span>
+                <span className="sr-only">{t('groups.todayDone', { done: 5 })}</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -397,19 +419,22 @@ function MemberTable({ bundle }: { bundle: GroupBundle }) {
               let doneCount = 0;
               return (
                 <tr key={m.user_id} className="border-b border-border/50">
-                  <td className="max-w-[140px] truncate px-2 py-2.5 font-medium">
+                  <td className="sticky start-0 z-10 max-w-[6.5rem] truncate bg-card py-2.5 pe-2 ps-1 font-medium md:max-w-[140px] md:pe-3">
                     {m.profiles?.display_name ?? '—'}
                   </td>
                   {PRAYERS.map((p) => {
                     const status = statusMap.get(logKey(m.user_id, p));
                     if (status === 'done') doneCount++;
                     return (
-                      <td key={p} className="px-2 py-2.5 text-center">
+                      <td
+                        key={p}
+                        className="px-1.5 py-2.5 text-center sm:px-2"
+                      >
                         <Cell status={status} />
                       </td>
                     );
                   })}
-                  <td className="px-2 py-2.5 text-center text-xs font-semibold text-teal-600 dark:text-teal-400">
+                  <td className="px-1.5 py-2.5 text-center text-xs font-semibold text-teal-600 sm:px-2 dark:text-teal-400">
                     {t('groups.todayDone', { done: doneCount })}
                   </td>
                 </tr>
